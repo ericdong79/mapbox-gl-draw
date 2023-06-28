@@ -1,6 +1,6 @@
 import * as Constants from './constants';
 
-export default function render() {
+export default function render () {
   // eslint-disable-next-line no-invalid-this
   const store = this;
   const mapExists = store.ctx.map && store.ctx.map.getSource(Constants.sources.HOT) !== undefined;
@@ -31,7 +31,7 @@ export default function render() {
   newHotIds.forEach(id => renderFeature(id, 'hot'));
   newColdIds.forEach(id => renderFeature(id, 'cold'));
 
-  function renderFeature(id, source) {
+  function renderFeature (id, source) {
     const feature = store.get(id);
     const featureInternal = feature.internal(mode);
     store.ctx.events.currentModeRender(featureInternal, (geojson) => {
@@ -53,7 +53,7 @@ export default function render() {
 
   if (store._emitSelectionChange) {
     store.ctx.map.fire(Constants.events.SELECTION_CHANGE, {
-      features: store.getSelected().map(feature => feature.toGeoJSON()),
+      features: store.getSelected().map(feature => feature && feature.toGeoJSON()),
       points: store.getSelectedCoordinates().map(coordinate => ({
         type: Constants.geojsonTypes.FEATURE,
         properties: {},
@@ -79,7 +79,7 @@ export default function render() {
   cleanup();
   store.ctx.map.fire(Constants.events.RENDER, {});
 
-  function cleanup() {
+  function cleanup () {
     store.isDirty = false;
     store.clearChangedIds();
   }
